@@ -24,6 +24,7 @@ public struct TextContentReaderSettingsFeature {
     var isVisible: Bool
     var fontSize: Int
     var lineHeight: Double
+    var readingMode: ReadingMode
     
     public init(
       isVisible: Bool = false,
@@ -32,12 +33,14 @@ public struct TextContentReaderSettingsFeature {
       self.isVisible = isVisible
       self.fontSize = settings.fontSize
       self.lineHeight = settings.lineHeight
+      self.readingMode = settings.readingMode
     }
   }
   
   public enum Action {
     case dismiss
     case setVisibility(Bool)
+    case setReadingMode(ReadingMode)
     case setFontSize(Int)
     case setLineHeight(Double)
     case saveSettings(ViewerSettings)
@@ -54,6 +57,7 @@ public struct TextContentReaderSettingsFeature {
       case .setFontSize(let size):
         state.fontSize = size
         let settings = ViewerSettings(
+          readingMode: state.readingMode,
           fontSize: size,
           lineHeight: state.lineHeight
         )
@@ -61,6 +65,7 @@ public struct TextContentReaderSettingsFeature {
       case .setLineHeight(let height):
         state.lineHeight = height
         let settings = ViewerSettings(
+          readingMode: state.readingMode,
           fontSize: state.fontSize,
           lineHeight: height
         )
@@ -68,6 +73,14 @@ public struct TextContentReaderSettingsFeature {
       case .saveSettings(let settings):
         updateViewerSettingsUseCase.execute(settings)
         return .none
+      case .setReadingMode(let readingMode):
+        state.readingMode = readingMode
+        let setting = ViewerSettings(
+          readingMode: readingMode,
+          fontSize: state.fontSize,
+          lineHeight: state.lineHeight
+        )
+        return .send(.saveSettings(setting))
       }
     }
   }

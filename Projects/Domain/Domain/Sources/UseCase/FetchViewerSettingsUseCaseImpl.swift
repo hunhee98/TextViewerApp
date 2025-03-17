@@ -17,8 +17,6 @@ public struct FetchViewerSettingsUseCaseImpl: FetchViewerSettingsUseCase {
   
   public func execute() -> ViewerSettings {
     let settings = repository.getSettings()
-    print("뷰어 설정 조회")
-    dump(settings)
     return settings
   }
 }

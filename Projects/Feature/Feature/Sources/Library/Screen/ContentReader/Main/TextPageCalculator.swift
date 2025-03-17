@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import DesignSystem
+import SwiftUICore
 
 class TextPageCalculator {
   struct PageConfig {
@@ -62,8 +64,13 @@ class TextPageCalculator {
         
         // 빈 페이지 제외
         if !pageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            pages.append(Page(pageNumber: pageNumber, content: pageText))
-            pageNumber += 1
+          pages.append(Page(
+            pageNumber: pageNumber,
+            content: pageText,
+            startIndex: currentPosition,
+            endIndex: currentPosition + length
+          ))
+          pageNumber += 1
         }
         
         currentPosition += length

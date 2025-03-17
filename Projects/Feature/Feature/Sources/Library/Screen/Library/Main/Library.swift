@@ -26,7 +26,6 @@ struct Library: View {
   }
   
   var body: some View {
-    
     NavigationStack(path: $libraryStore.path) {
       LibraryDirectory(
         libraryStore: libraryStore,

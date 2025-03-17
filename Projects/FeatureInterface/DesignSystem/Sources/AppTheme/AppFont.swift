@@ -11,13 +11,22 @@ import SwiftUI
 public enum AppFont {
   case pretendard(Pretendard)
   case ridiBatang
-
+  
   public func of(size: CGFloat) -> Font {
     switch self {
     case .pretendard(let pretendard):
       return pretendard.fontFamily.swiftUIFont(size: size)
     case .ridiBatang:
       return DesignSystemFontFamily.RIDIBatang.regular.swiftUIFont(size: size)
+    }
+  }
+  
+  public func uiFont(size: CGFloat) -> UIFont {
+    switch self {
+    case .pretendard(let pretendard):
+      return pretendard.fontFamily.font(size: size)
+    case .ridiBatang:
+      return DesignSystemFontFamily.RIDIBatang.regular.font(size: size)
     }
   }
 }
@@ -32,7 +41,7 @@ public enum Pretendard: String, CaseIterable {
   case regular
   case semiBold
   case thin
-
+  
   var fontFamily: DesignSystemFontConvertible {
     typealias Pretendard = DesignSystemFontFamily.Pretendard
     switch self {

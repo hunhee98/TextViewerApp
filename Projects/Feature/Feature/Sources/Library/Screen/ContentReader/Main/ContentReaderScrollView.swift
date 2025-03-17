@@ -48,6 +48,7 @@ public struct ContentReaderScrollView: View {
       .padding(.bottom, 24)
       .scrollTargetLayout()
     }
+    .padding(.top, 50)
     .scrollIndicators(.hidden)
     .scrollPosition(
       id:

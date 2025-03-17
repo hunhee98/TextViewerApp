@@ -29,18 +29,6 @@ public struct Settings: View {
           }
           
           SettingsItem(
-            type: .navigation(title: "언어 설정")
-          ) {
-            print("개발자")
-          }
-          
-          SettingsItem(
-            type: .navigation(title: "개발자 정보")
-          ) {
-            print("개발자")
-          }
-          
-          SettingsItem(
             type: .info(title: "버전 정보", value: "1.0.0")
           ) {
             print("개발자")

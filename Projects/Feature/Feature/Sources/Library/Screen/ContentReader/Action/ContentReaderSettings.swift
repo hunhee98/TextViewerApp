@@ -9,6 +9,7 @@
 import ComposableArchitecture
 import DesignSystem
 import SwiftUI
+import DomainInterface
 
 public struct ContentReaderSettings: View {
   public let isPresented: Bool
@@ -41,12 +42,34 @@ public struct ContentReaderSettings: View {
   @ViewBuilder
   private func settingsList() -> some View {
     ScrollView {
-      VStack(spacing: 24) {
+      VStack(spacing: 34) {
+        viewerMode()
         textSize()
         lingHeight()
       }
       .padding(.vertical, 36)
       .padding(.horizontal, 20)
+    }
+  }
+  
+  @ViewBuilder
+  private func viewerMode() -> some View {
+    VStack(alignment: .leading, spacing: 16) {
+      Text("읽기 모드")
+        .font(AppFont.pretendard(.medium).of(size: 18))
+      
+      Picker("읽기 모드", selection: .init(
+        get: { store.readingMode },
+        set: { store.send(.setReadingMode($0)) }
+        )
+      ) {
+        Text(ReadingMode.scroll.description)
+          .tag(ReadingMode.scroll)
+        
+        Text(ReadingMode.page.description)
+          .tag(ReadingMode.page)
+      }
+      .pickerStyle(.segmented)
     }
   }
 

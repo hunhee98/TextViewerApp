@@ -2,7 +2,7 @@ import ConfigurationPlugin
 import Foundation
 import ProjectDescription
 
-public enum GenerateEnvironment: String {
+public enum GenerateEnvironment: String, Sendable {
     case ci = "CI"
     case cd = "CD"
     case dev = "DEV"

@@ -38,7 +38,7 @@ public struct ContentReaderOverlayView: View {
                   }
                   .frame(width: 30, height: 30)
 
-                  Text("\(store.content.name).txt")
+                  Text(store.content.name)
                     .lineLimit(2)
                     .font(AppFont.pretendard(.regular).of(size: 17))
                     .foregroundStyle(AppColor.appBlack.swiftUIColor)
@@ -84,20 +84,40 @@ public struct ContentReaderOverlayView: View {
 
               CustomSlider(
                 value: Binding(
-                  get: { Double(self.store.state.scrolledId) },
-                  set: {
-                    self.store.send(.setUpdateSource(.slider))
-                    self.store.send(.setScrolledId(Int($0)))
-                  }
+                  get: {
+                              switch store.viewerSettings.readingMode {
+                              case .scroll:
+                                  return Double(store.scrolledId)
+                              case .page:
+                                  return Double(store.currentPage)
+                              }
+                          },
+                          set: { newValue in
+                              store.send(.setUpdateSource(.slider))
+                              switch store.viewerSettings.readingMode {
+                              case .scroll:
+                                  store.send(.setScrolledId(Int(newValue)))
+                              case .page:
+                                  store.send(.setCurrentPage(Int(newValue)))
+                              }
+                          }
                 ),
-                range: 0...Double((store.state.textItemList.count - 1)),
+                range: 0...Double(
+                        store.viewerSettings.readingMode == .scroll
+                        ? (store.textItemList.count - 1)
+                        : (store.pages.count)
+                    ),
                 roundToNearestInt: true
               )
               .tint(AppColor.appPrimary.swiftUIColor)
               .controlSize(.mini)
               .padding(EdgeInsets(top: 18, leading: 22, bottom: 0, trailing: 22))
 
-              Text("\(self.store.state.scrolledId) / \(self.store.state.textItemList.count - 1)")
+              Text(
+                  store.viewerSettings.readingMode == .scroll
+                  ? "\(store.scrolledId) / \(store.textItemList.count - 1)"
+                  : "\(store.currentPage) / \(store.pages.count)"
+              )
                 .font(AppFont.pretendard(.semiBold).of(size: 14))
                 .foregroundStyle(AppColor.appBlack.swiftUIColor)
 

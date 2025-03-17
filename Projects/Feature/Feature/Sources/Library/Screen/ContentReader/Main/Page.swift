@@ -12,4 +12,6 @@ struct Page: Identifiable, Equatable {
   let id = UUID()
   let pageNumber: Int
   let content: String
+  let startIndex: Int
+  let endIndex: Int
 }

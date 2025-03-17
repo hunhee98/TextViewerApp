@@ -16,8 +16,6 @@ public struct UpdateViewerSettingsUseCaseImpl: UpdateViewerSettingsUseCase {
   }
   
   public func execute(_ settings: ViewerSettings) {
-    print("뷰어 설정 적용")
-    dump(settings)
     repository.saveSettings(settings)
   }
 }

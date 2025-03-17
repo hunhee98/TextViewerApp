@@ -37,7 +37,7 @@ let targets: [Target] = [
       .feature(target: .Feature),
       .data(target: .Data)
     ],
-    settings: .settings(base: env.baseSetting)
+    settings: .settings(base: env.baseSetting.merging(.codeSign))
   )
 ]
 
