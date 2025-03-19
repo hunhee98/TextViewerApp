@@ -35,10 +35,11 @@ let targets: [Target] = [
     scripts: scripts,
     dependencies: [
       .feature(target: .Feature),
-      .data(target: .Data)
+      .data(target: .Data),
+      .sdk(name: "WatchConnectivity.framework", type: .framework)
     ],
     settings: .settings(base: env.baseSetting.merging(.codeSign))
-  )
+  ),
 ]
 
 let schemes: [Scheme] = [

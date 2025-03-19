@@ -658,6 +658,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4F3AEA1863C25FFCE614CF5E"
+               BuildableName = "TextViewerWatchApp.app"
+               BlueprintName = "TextViewerWatchApp"
+               ReferencedContainer = "container:Projects/WatchApp/MyTextViewer WatchApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "8A53F29ADBAE4C27AB5DA4CE"
                BuildableName = "UIKitNavigation.framework"
                BlueprintName = "UIKitNavigation"
