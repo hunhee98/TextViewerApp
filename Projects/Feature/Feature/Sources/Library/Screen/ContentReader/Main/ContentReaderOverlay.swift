@@ -9,6 +9,7 @@
 import SwiftUI
 import DesignSystem
 import ComposableArchitecture
+import DomainInterface
 
 public struct ContentReaderOverlayView: View {
   let toolbarHeight: CGFloat = 64
@@ -60,6 +61,16 @@ public struct ContentReaderOverlayView: View {
                     store.send(.textSettingsButtonTapped)
                   } label: {
                     Image(systemName: "textformat")
+                      .font(.system(size: 20, weight: .regular))
+                      .foregroundStyle(AppColor.appBlack.swiftUIColor)
+                  }
+                  .frame(width: 30, height: 30)
+                  .padding(.trailing, 8)
+                  
+                  Button {
+                    store.send(.sendToWatch)
+                  } label: {
+                    Image(systemName: "applewatch")
                       .font(.system(size: 20, weight: .regular))
                       .foregroundStyle(AppColor.appBlack.swiftUIColor)
                   }

@@ -5,7 +5,7 @@
       location = "group:Projects"
       name = "Projects">
       <FileRef
-         location = "group:App/MyTextViewer.xcodeproj">
+         location = "group:App/TextViewer.xcodeproj">
       </FileRef>
       <Group
          location = "group:Data"

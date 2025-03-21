@@ -10,10 +10,10 @@ public struct ProjectEnvironment : Sendable {
 }
 
 public let env = ProjectEnvironment(
-  name: "MyTextViewer",
+  name: "TextViewer",
   organizationName: "com.hunhee",
   destinations: [.iPhone],
-  deploymentTargets: .iOS("17.0"),
+  deploymentTargets: .iOS("18.0"),
   baseSetting: [:]
 )
 

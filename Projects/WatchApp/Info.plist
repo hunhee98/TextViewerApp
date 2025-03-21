@@ -2,12 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>WKApplication</key>
-	<true/>
-	<key>WKBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
+	<key>WKRunsIndependentlyOfCompanionApp</key>
+	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -29,7 +25,13 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>WKBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>com.hunhee.MyTextViewer</string>
+	<string>com.hunhee.TextViewer</string>
+	<key>WKApplication</key>
+	<true/>
 </dict>
 </plist>

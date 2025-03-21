@@ -364,20 +364,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C0616ADFC2084B30BA3FBAFB"
-               BuildableName = "MyTextViewer.app"
-               BlueprintName = "MyTextViewer"
-               ReferencedContainer = "container:Projects/App/MyTextViewer.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "E07053DCBDB7F16C14688195"
                BuildableName = "OrderedCollections.framework"
                BlueprintName = "OrderedCollections"
@@ -658,10 +644,24 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DCCFDC336A8AF2383DF4B38F"
+               BlueprintIdentifier = "38B6E97F6C3298F4895A63A3"
+               BuildableName = "TextViewer.app"
+               BlueprintName = "TextViewer"
+               ReferencedContainer = "container:Projects/App/TextViewer.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9A37420660EA91230A81CBCE"
                BuildableName = "TextViewerWatchApp.app"
                BlueprintName = "TextViewerWatchApp"
-               ReferencedContainer = "container:Projects/App/MyTextViewer.xcodeproj">
+               ReferencedContainer = "container:Projects/App/TextViewer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry

@@ -11,16 +11,16 @@ import Foundation
 
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name
-public enum MyTextViewerStrings: Sendable {
+public enum TextViewerStrings: Sendable {
   /// 나의 텍스트 뷰어
-  public static let cfBundleDisplayName = MyTextViewerStrings.tr("InfoPlist", "CFBundleDisplayName")
+  public static let cfBundleDisplayName = TextViewerStrings.tr("InfoPlist", "CFBundleDisplayName")
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name
 
 // MARK: - Implementation Details
 
-extension MyTextViewerStrings {
+extension TextViewerStrings {
   private static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
     let format = Bundle.module.localizedString(forKey: key, value: nil, table: table)
     return String(format: format, locale: Locale.current, arguments: args)

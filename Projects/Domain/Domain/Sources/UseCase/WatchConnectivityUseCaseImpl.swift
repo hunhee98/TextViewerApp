@@ -1,0 +1,26 @@
+import Foundation
+import DomainInterface
+
+public final class WatchConnectivityUseCaseImpl: WatchConnectivityUseCase {
+  private let repository: WatchConnectivityInterface
+  
+  public init(repository: WatchConnectivityInterface) {
+    self.repository = repository
+  }
+  
+  public var isWatchAppInstalled: Bool {
+    repository.isWatchAppInstalled
+  }
+  
+  public func sendTextFileToWatch(fileName: String, content: String) throws {
+    guard !fileName.isEmpty, !content.isEmpty else {
+        throw WatchConnectivityError.invalidContent
+    }
+    
+    try repository.sendFileToWatch(fileName: fileName, content: content)
+  }
+}
+
+public enum WatchConnectivityError: Error {
+  case invalidContent
+}

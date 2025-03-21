@@ -15,9 +15,14 @@ import SwiftUICore
 @Reducer
 public struct TextContentReaderFeature {
   private let updateViewerSettingsUseCase: UpdateViewerSettingsUseCase
+  private let watchConnectivityUseCase: WatchConnectivityUseCase
   
-  public init(updateViewerSettingsUseCase: UpdateViewerSettingsUseCase) {
+  public init(
+    updateViewerSettingsUseCase: UpdateViewerSettingsUseCase,
+    watchConnectivityUseCase: WatchConnectivityUseCase
+  ) {
     self.updateViewerSettingsUseCase = updateViewerSettingsUseCase
+    self.watchConnectivityUseCase = watchConnectivityUseCase
   }
   
   @ObservableState
@@ -104,6 +109,7 @@ public struct TextContentReaderFeature {
     
     case searchButtonTapped
     case textSettingsButtonTapped
+    case sendToWatch
     
     // 바인딩 액션 (TCA 요구 사항)
     case binding(BindingAction<State>)
@@ -148,11 +154,10 @@ public struct TextContentReaderFeature {
         state.isOverlayVisible = false
         state.scrolledId = id
         state.highlightItem = id
-        
         return .none
       case .searchFeature:
         return .none
-      case .settingFeature(.saveSettings):
+      case .settingFeature(.saveSettings(let settings)):
         let newSettings = ViewerSettings(
           readingMode: state.settingsFeature.readingMode,
           fontSize: state.settingsFeature.fontSize,
@@ -196,6 +201,14 @@ public struct TextContentReaderFeature {
           )
         )
         state.isPageCalculated = true
+        return .none
+      case .sendToWatch:
+        let currentContent = state.content
+        do {
+          try watchConnectivityUseCase.sendTextFileToWatch(fileName: currentContent.name, content: currentContent.content)
+        } catch {
+          print("에러남")
+        }
         return .none
       }
     }

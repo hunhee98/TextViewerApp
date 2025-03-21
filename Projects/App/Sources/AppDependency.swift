@@ -30,6 +30,9 @@ public struct AppDependency {
       ),
       updateViewerSettingsUseCase: UpdateViewerSettingsUseCaseImpl(
         repository: ViewerSettingsRepositoryImpl()
+      ),
+      watchConnectivityUseCase: WatchConnectivityUseCaseImpl(
+        repository: WatchConnectivityManager.shared
       )
     )
   )
@@ -43,7 +46,10 @@ public struct AppDependency {
         repository: FileRepositoryImpl()
       ),
       fetchViewerSettingsUseCase: MockFetchViewerSettingsUseCaseImpl(),
-      updateViewerSettingsUseCase: MockUpdateViewerSettingsUseCaseImpl()
+      updateViewerSettingsUseCase: MockUpdateViewerSettingsUseCaseImpl(),
+      watchConnectivityUseCase: WatchConnectivityUseCaseImpl(
+        repository: WatchConnectivityManager.shared
+      )
     )
   )
   

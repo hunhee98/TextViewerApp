@@ -201,7 +201,8 @@ public struct LibraryFeature {
     }
     .ifLet(\.textContentReader, action: \.textContentReader) {
       TextContentReaderFeature(
-        updateViewerSettingsUseCase: dependency.updateViewerSettingsUseCase
+        updateViewerSettingsUseCase: dependency.updateViewerSettingsUseCase,
+        watchConnectivityUseCase: dependency.watchConnectivityUseCase
       )
     }
   }
