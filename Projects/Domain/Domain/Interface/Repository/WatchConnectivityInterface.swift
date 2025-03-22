@@ -11,8 +11,6 @@ import Foundation
 public protocol WatchConnectivityInterface {
   var isWatchAppInstalled: Bool { get }
   
-  func sendMessageToWatchAsync(message: String) async throws
   func sendMessageToWatch(message: String) throws
-  
   func sendFileToWatch(fileName: String, content: String) throws
 }

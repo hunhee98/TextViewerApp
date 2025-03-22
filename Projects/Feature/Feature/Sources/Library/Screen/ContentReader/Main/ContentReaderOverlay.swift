@@ -68,13 +68,20 @@ public struct ContentReaderOverlayView: View {
                   .padding(.trailing, 8)
                   
                   Button {
-                    store.send(.sendToWatch)
+                    if store.isWatchAppInstalled {
+                      store.send(.sendToWatch)
+                    } else {
+                      print("설정으로 이동")
+                    }
                   } label: {
-                    Image(systemName: "applewatch")
+                    Image(systemName: store.isWatchAppInstalled ? "applewatch" : "applewatch.slash")
                       .font(.system(size: 20, weight: .regular))
-                      .foregroundStyle(AppColor.appBlack.swiftUIColor)
+                      .foregroundStyle(store.isWatchAppInstalled ? AppColor.appPrimary.swiftUIColor : AppColor.appGray400.swiftUIColor)
                   }
                   .frame(width: 30, height: 30)
+                  .onAppear {
+                    store.send(.checkWatchAppInstalled)
+                  }
                 }
               }
               .padding(EdgeInsets(top: 0, leading: 16, bottom: 14, trailing: 20))

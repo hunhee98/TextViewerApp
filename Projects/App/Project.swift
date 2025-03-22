@@ -27,7 +27,7 @@ let watch: Target =  .target(
   destinations: .watchOS,
   product: .app,
   bundleId: "\(env.organizationName).\(env.name).watchkitapp",
-  deploymentTargets: .watchOS("9.0"),
+  deploymentTargets: .watchOS("10.0"),
   infoPlist: .file(path: .relativeToRoot("Projects/WatchApp/Info.plist")),
   sources: [.glob(.relativeToRoot("Projects/WatchApp/Sources/**"))],
   resources: [.glob(pattern: .relativeToRoot("Projects/WatchApp/Resources/**"))],

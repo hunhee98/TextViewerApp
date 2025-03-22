@@ -47,6 +47,8 @@ public struct TextContentReaderFeature {
     var currentPage: Int = 1
     var isPageCalculated: Bool = false
     
+    var isWatchAppInstalled: Bool = false
+    
     public init(
       content: ContentItem,
       viewerSettings: ViewerSettings,
@@ -109,7 +111,9 @@ public struct TextContentReaderFeature {
     
     case searchButtonTapped
     case textSettingsButtonTapped
+    
     case sendToWatch
+    case checkWatchAppInstalled
     
     // 바인딩 액션 (TCA 요구 사항)
     case binding(BindingAction<State>)
@@ -210,6 +214,9 @@ public struct TextContentReaderFeature {
           print("에러남")
         }
         return .none
+      case .checkWatchAppInstalled:
+        state.isWatchAppInstalled = watchConnectivityUseCase.isWatchAppInstalled
+        return .none
       }
     }
   }
@@ -220,16 +227,16 @@ public struct TextContentReaderFeature {
     chunks: [ContentTextChunk]
   ) -> Int {
     let currentPosition = pages[0...currentPage]
-       .reduce(0) { $0 + $1.content.count }
-
+      .reduce(0) { $0 + $1.content.count }
+    
     var accumulatedLength = 0
     for chunk in chunks {
-       accumulatedLength += chunk.paragraph.count
-       if accumulatedLength >= currentPosition {
-           return chunk.id
-       }
+      accumulatedLength += chunk.paragraph.count
+      if accumulatedLength >= currentPosition {
+        return chunk.id
+      }
     }
-
+    
     return 0
   }
   
