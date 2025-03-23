@@ -1,0 +1,10 @@
+{
+    "aps": {
+        "alert": {
+            "fileName": "Test message",
+            "content": "Optional title",
+        },
+        "category": "textFileResponse",
+        "thread-id": "5280"
+    },
+}

@@ -1,4 +1,5 @@
 import SwiftUI
+import UserNotifications
 
 struct FileReceptionInfo {
   let content: String
@@ -34,6 +35,17 @@ struct ContentView: View {
         )))
       }
     }
+// Push Notification의 흔적
+//    .task {
+//      let center = UNUserNotificationCenter.current()
+//      _ = try? await center.requestAuthorization(
+//        options: [
+//          .alert,
+//          .sound,
+//          .badge
+//        ]
+//      )
+//    }
   }
   
   private var mainView: some View {

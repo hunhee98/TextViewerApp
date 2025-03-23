@@ -6,5 +6,9 @@ struct WatchApp: App {
     WindowGroup {
       ContentView()
     }
+    
+    #if os(watchOS)
+        WKNotificationScene(controller: NotificationController.self, category: "textFileResponse")
+    #endif
   }
 }
