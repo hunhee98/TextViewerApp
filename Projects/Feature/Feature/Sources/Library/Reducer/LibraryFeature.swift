@@ -12,6 +12,7 @@ import DomainInterface
 import Foundation
 import SwiftUI
 import Shared
+import Combine
 
 @Reducer
 public struct LibraryFeature {
@@ -33,6 +34,12 @@ public struct LibraryFeature {
     var isShowingCreateFolderSheet: Bool = false
     var isShowingContentReader: Bool = false
     var isShowingActionMenu: Bool = false
+    
+    var isShowingFileRequest: Bool = false
+    var subscriptionState: SubscriptionState = .unsubscribed
+    var textFiles: [ContentItem] = []
+    var isTextFileSearching: Bool = false
+    var selectedFile: ContentItem? = nil
     
     @Presents var textContentReader: TextContentReaderFeature.State?
     var presentedContent: ContentItem?
@@ -76,6 +83,11 @@ public struct LibraryFeature {
       self.presentedContent = presentedContent
       self.error = error
     }
+    
+    enum SubscriptionState {
+      case subscribed
+      case unsubscribed
+    }
   }
   
   public enum Action: BindableAction {
@@ -89,6 +101,19 @@ public struct LibraryFeature {
     case tappedActionMenu
     case selectedFile(URL)
     case createFolder(folderName: String)
+    
+    case setShowingFileReqeustBottomSheet(Bool)
+    
+    case startWatchMessageSubscription
+    case stopWatchMessageSubscription
+    case subscriptionDidStart
+    case watchMessageReceived(Result<WatchMessage.Message, Error>)
+    
+    case startTextFileSearch
+    case stopTextFileSearch
+    case textFileFound(ContentItem)
+    case selectFile(ContentItem?)
+    case sendToWatch(ContentItem)
     
     // Internal Action
     case loadDirectory(path: String)
@@ -197,6 +222,85 @@ public struct LibraryFeature {
       case .tappedActionMenu:
         state.isShowingActionMenu = true
         return .none
+        
+      case .startWatchMessageSubscription:
+        guard state.subscriptionState == .unsubscribed else { return .none }
+        return .run { send in
+          let messages = dependency.watchConnectivityUseCase.messagePublisher.values
+          await send(.subscriptionDidStart)
+          for await message in messages {
+            switch message {
+            case .fileRequest:
+              await send(.watchMessageReceived(.success(message))) // 파일 요청 처리
+            case .text(let content):
+              print("Received text message: \(content)") // 텍스트 처리 (예: 로그)
+              // 필요 시 별도 액션 추가: await send(.watchMessageReceived(.success(message)))
+            case .fileResponse(let success):
+              print("File response received: \(success ? "Success" : "Failure")") // 응답 처리
+              // 필요 시 별도 액션 추가: await send(.watchMessageReceived(.success(message)))
+            }
+          }
+        }
+        .cancellable(id: WatchMessageSubscriptionID())
+        
+      case .stopWatchMessageSubscription:
+        state.subscriptionState = .unsubscribed
+        return .cancel(id: WatchMessageSubscriptionID())
+        
+      case .subscriptionDidStart:
+        state.subscriptionState = .subscribed
+        return .none
+        
+      case .watchMessageReceived(.success):
+        if !state.isShowingFileRequest {
+          state.isShowingFileRequest = true
+          return .run { send in
+            await send(.startTextFileSearch)
+          }
+        } else {
+          return .none
+        }
+        
+      case .watchMessageReceived(.failure):
+        // 에러 처리 (예: 알림 표시)
+        return .none
+        
+      case .setShowingFileReqeustBottomSheet(let bool):
+        state.isShowingFileRequest = bool
+        return .none
+        
+      case .startTextFileSearch:
+        print("파일 검색 시작~")
+        state.isTextFileSearching = true
+        return .run { send in
+          for await wrapper in dependency.fetchTextFilesUseCase.execute() {
+            await send(.textFileFound(wrapper))
+          }
+        }
+        .cancellable(id: TextFileSearchID())
+        
+      case .stopTextFileSearch:
+        state.isTextFileSearching = false
+        state.textFiles.removeAll()
+        return .cancel(id: TextFileSearchID())
+        
+      case .textFileFound(let wrapper):
+        state.textFiles.append(wrapper)
+        return .none
+        
+      case .selectFile(let wrapper):
+        state.selectedFile = wrapper
+        return .none
+        
+      case .sendToWatch(let contentItem):
+        do {
+          try dependency.watchConnectivityUseCase.sendTextFileToWatch(fileName: contentItem.name, content: contentItem.content)
+        } catch {
+          print("에러남")
+        }
+        state.isShowingFileRequest = false
+        state.selectedFile = nil
+        return .none
       }
     }
     .ifLet(\.textContentReader, action: \.textContentReader) {
@@ -207,3 +311,6 @@ public struct LibraryFeature {
     }
   }
 }
+
+struct WatchMessageSubscriptionID: Hashable {}
+struct TextFileSearchID: Hashable {}

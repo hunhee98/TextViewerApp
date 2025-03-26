@@ -23,11 +23,11 @@ public struct FileRepositoryImpl: FileRepository {
         return component.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? component
       }
       .joined(separator: "/")
-
+    
     if path.isEmpty {
       return Self.baseDirectory
     }
-
+    
     return Self.baseDirectory.appendingPathComponent(path)
   }
   
@@ -61,7 +61,7 @@ public struct FileRepositoryImpl: FileRepository {
   
   public func deleteFile(at path: String) throws {
     let url = try resolveURL(path: path)
-
+    
     do {
       try fileManager.removeItem(at: url)
     } catch {
@@ -107,7 +107,7 @@ public struct FileRepositoryImpl: FileRepository {
         }
         
         let relativePath = url.path.replacingOccurrences(of: Self.baseDirectory.path, with: "")
-                                    .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+          .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
         
         return FileInfo(
           name: url.lastPathComponent,
@@ -123,6 +123,82 @@ public struct FileRepositoryImpl: FileRepository {
       }
     } catch {
       throw FileRepositoryError.listFilesFailed(error: error)
+    }
+  }
+  
+  public func listTextFilesRecursivelyAsync(at path: String) -> AsyncStream<FileInfo> {
+    let directoryURL = (try? resolveURL(path: path)) ?? Self.baseDirectory
+    print("Starting recursive search at: \(directoryURL.path)")
+    
+    return AsyncStream { continuation in
+      let task = Task {
+        func enumerateFilesAsync(at url: URL) async {
+          guard !Task.isCancelled else {
+            print("Task cancelled at: \(url.path)")
+            continuation.finish()
+            return
+          }
+          
+          print("Exploring directory: \(url.path)")
+          do {
+            let fileURLs = try fileManager.contentsOfDirectory(
+              at: url,
+              includingPropertiesForKeys: [.isDirectoryKey, .fileSizeKey, .creationDateKey, .contentModificationDateKey, .pathKey, .canonicalPathKey],
+              options: .skipsHiddenFiles
+            )
+            
+            for fileURL in fileURLs {
+              guard !Task.isCancelled else {
+                print("Task cancelled during exploration at: \(url.path)")
+                continuation.finish()
+                return
+              }
+              
+              let resourceValues = try fileURL.resourceValues(forKeys: [.isDirectoryKey])
+              let isDirectory = resourceValues.isDirectory ?? false
+              
+              if isDirectory {
+                print("Found subdirectory: \(fileURL.path), diving deeper...")
+                await enumerateFilesAsync(at: fileURL)
+              } else if fileURL.pathExtension.lowercased() == "txt" {
+                print("Found text file: \(fileURL.path)")
+                let resourceValues = try fileURL.resourceValues(forKeys: [.isDirectoryKey, .fileSizeKey, .creationDateKey, .contentModificationDateKey, .pathKey, .canonicalPathKey])
+                
+                let fileData = try Data(contentsOf: fileURL)
+                let relativePath = fileURL.path.replacingOccurrences(of: Self.baseDirectory.path, with: "")
+                  .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+                
+                let fileInfo = FileInfo(
+                  name: fileURL.lastPathComponent,
+                  isDirectory: false,
+                  fileSize: resourceValues.fileSize.map { Int64($0) },
+                  creationDate: resourceValues.creationDate,
+                  modificationDate: resourceValues.contentModificationDate,
+                  fileExtension: fileURL.pathExtension,
+                  numberOfItems: nil,
+                  data: fileData,
+                  path: relativePath
+                )
+                continuation.yield(fileInfo)
+              } else {
+                print("Skipping non-text file: \(fileURL.path)")
+              }
+            }
+          } catch {
+            print("Error exploring \(url.path): \(error)")
+            continuation.finish()
+          }
+        }
+        
+        await enumerateFilesAsync(at: directoryURL)
+        print("Finished recursive search at: \(directoryURL.path)")
+        continuation.finish()
+      }
+      
+      continuation.onTermination = { _ in
+        print("Stream terminated, cancelling task")
+        task.cancel()
+      }
     }
   }
 }

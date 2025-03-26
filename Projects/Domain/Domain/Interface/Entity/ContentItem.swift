@@ -8,6 +8,8 @@
 import Foundation
 
 public struct ContentItem: LibraryItem {
+  public var id: UUID = UUID()
+  
   public var name: String
   public let createdDate: Date
   public let fileSize: Int64

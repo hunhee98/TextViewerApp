@@ -35,17 +35,17 @@ struct ContentView: View {
         )))
       }
     }
-// Push Notification의 흔적
-//    .task {
-//      let center = UNUserNotificationCenter.current()
-//      _ = try? await center.requestAuthorization(
-//        options: [
-//          .alert,
-//          .sound,
-//          .badge
-//        ]
-//      )
-//    }
+    // Push Notification의 흔적
+    //    .task {
+    //      let center = UNUserNotificationCenter.current()
+    //      _ = try? await center.requestAuthorization(
+    //        options: [
+    //          .alert,
+    //          .sound,
+    //          .badge
+    //        ]
+    //      )
+    //    }
   }
   
   private var mainView: some View {
@@ -70,7 +70,19 @@ struct ContentView: View {
     VStack {
       Text("iOS 앱에서 파일을 선택해주세요")
         .multilineTextAlignment(.center)
+      
       ProgressView()
+    }
+    .toolbar {
+      ToolbarItem(placement: .topBarLeading) {
+        Button(action: {
+          router.navigateToMain()
+        }) {
+          Image(systemName: "chevron.left")
+            .font(.system(size: 12))
+            .imageScale(.medium)
+        }
+      }
     }
   }
 }

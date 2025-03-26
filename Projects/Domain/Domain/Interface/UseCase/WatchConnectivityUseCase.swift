@@ -7,9 +7,11 @@
 //
 
 import Foundation
+import Combine
 
 public protocol WatchConnectivityUseCase {
   var isWatchAppInstalled: Bool { get }
+  var messagePublisher: PassthroughSubject<WatchMessage.Message, Never> { get }
   
   func sendTextFileToWatch(fileName: String, content: String) throws
 }

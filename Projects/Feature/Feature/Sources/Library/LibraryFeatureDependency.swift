@@ -16,6 +16,7 @@ public struct LibraryFeatureDependency {
   public let fetchViewerSettingsUseCase: FetchViewerSettingsUseCase
   public let updateViewerSettingsUseCase: UpdateViewerSettingsUseCase
   public let watchConnectivityUseCase: WatchConnectivityUseCase
+  public let fetchTextFilesUseCase: FetchTextFilesUseCase
 
   public init(
     fetchFileListUseCase: FetchFileListUseCase,
@@ -23,7 +24,8 @@ public struct LibraryFeatureDependency {
     createFolderUseCase: CreateFolderUseCase,
     fetchViewerSettingsUseCase: FetchViewerSettingsUseCase,
     updateViewerSettingsUseCase: UpdateViewerSettingsUseCase,
-    watchConnectivityUseCase: WatchConnectivityUseCase
+    watchConnectivityUseCase: WatchConnectivityUseCase,
+    fetchTextFilesUseCase: FetchTextFilesUseCase
   ) {
     self.fetchFileListUseCase = fetchFileListUseCase
     self.downloadFileUseCase = downloadFileUseCase
@@ -31,5 +33,6 @@ public struct LibraryFeatureDependency {
     self.fetchViewerSettingsUseCase = fetchViewerSettingsUseCase
     self.updateViewerSettingsUseCase = updateViewerSettingsUseCase
     self.watchConnectivityUseCase = watchConnectivityUseCase
+    self.fetchTextFilesUseCase = fetchTextFilesUseCase
   }
 }

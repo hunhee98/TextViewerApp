@@ -9,7 +9,7 @@
 import Foundation
 
 /// LibraryItem(Folder, Conetnt)에 공통적인 요구사항을 정의한 Protocol이에요.
-public protocol LibraryItem: Hashable {
+public protocol LibraryItem: Hashable, Identifiable {
   var name: String { get }
   var createdDate: Date { get }
   var type: LibraryItemType { get }

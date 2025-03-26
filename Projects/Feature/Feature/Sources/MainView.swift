@@ -14,13 +14,32 @@ public struct MainView: View {
   let moreStore: StoreOf<SettingsFeature>
   
   public var body: some View {
-    Library(
-      libraryStore: libraryStore,
-      moreStore: moreStore
-    )
+    ZStack {
+      Library(
+        libraryStore: libraryStore,
+        moreStore: moreStore
+      )
+    }
     .toolbar(.hidden, for: .navigationBar)
+    .onAppear {
+      libraryStore.send(.startWatchMessageSubscription)
+    }
+    .onDisappear {
+      libraryStore.send(.stopWatchMessageSubscription)
+    }
+    .sheet(
+      isPresented: Binding(
+        get: { libraryStore.isShowingFileRequest },
+        set: { libraryStore.send(.setShowingFileReqeustBottomSheet($0)) }
+      )
+    ) {
+      FileRequestBottomSheet(libraryStore: libraryStore)
+      .onDisappear {
+        libraryStore.send(.stopTextFileSearch)
+      }
+    }
   }
-
+  
   public init(
     libraryStore: StoreOf<LibraryFeature>,
     moreStore: StoreOf<SettingsFeature>

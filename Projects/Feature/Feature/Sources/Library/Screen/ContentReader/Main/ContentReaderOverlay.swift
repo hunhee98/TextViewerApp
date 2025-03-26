@@ -69,7 +69,7 @@ public struct ContentReaderOverlayView: View {
                   
                   Button {
                     if store.isWatchAppInstalled {
-                      store.send(.sendToWatch)
+                      store.send(.sendToWatch(store.content))
                     } else {
                       print("설정으로 이동")
                     }

@@ -1,50 +1,16 @@
 import Foundation
+import Combine
 import WatchConnectivity
 import DomainInterface
 
-enum WatchMessage {
-  enum Message {
-    case text(String)
-    case fileRequest
-    case fileResponse(success: Bool)
-    
-    var dictionary: [String: Any] {
-      switch self {
-      case .text(let content):
-        return ["type": "text", "content": content]
-      case .fileRequest:
-        return ["type": "fileRequest"]
-      case .fileResponse(let success):
-        return ["type": "fileResponse", "success": success]
-      }
-    }
-    
-    static func parse(_ dictionary: [String: Any]) -> Message? {
-      guard let type = dictionary["type"] as? String else { return nil }
-      
-      switch type {
-      case "text":
-        if let content = dictionary["content"] as? String {
-          return .text(content)
-        }
-      case "fileRequest":
-        return .fileRequest
-      case "fileResponse":
-        if let success = dictionary["success"] as? Bool {
-          return .fileResponse(success: success)
-        }
-      default:
-        return nil
-      }
-      return nil
-    }
-  }
-}
-
 public final class WatchConnectivityManager: NSObject, WatchConnectivityInterface {
   public static let shared = WatchConnectivityManager()
+  
   private var session: WCSession
+  
   @Published public var isWatchAppInstalled: Bool = false
+  
+  public let messagePublisher = PassthroughSubject<WatchMessage.Message, Never>()
   
   private override init() {
     session = WCSession.default
@@ -108,6 +74,9 @@ extension WatchConnectivityManager: WCSessionDelegate {
           print("iOS 앱: 알 수 없는 메시지 형식")
           return
       }
+    
+      // 메시지 발행
+      messagePublisher.send(parsedMessage)
       
       switch parsedMessage {
       case .fileRequest:

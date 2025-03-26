@@ -112,7 +112,7 @@ public struct TextContentReaderFeature {
     case searchButtonTapped
     case textSettingsButtonTapped
     
-    case sendToWatch
+    case sendToWatch(ContentItem)
     case checkWatchAppInstalled
     
     // 바인딩 액션 (TCA 요구 사항)
@@ -206,10 +206,9 @@ public struct TextContentReaderFeature {
         )
         state.isPageCalculated = true
         return .none
-      case .sendToWatch:
-        let currentContent = state.content
+      case .sendToWatch(let contentItem):
         do {
-          try watchConnectivityUseCase.sendTextFileToWatch(fileName: currentContent.name, content: currentContent.content)
+          try watchConnectivityUseCase.sendTextFileToWatch(fileName: contentItem.name, content: contentItem.content)
         } catch {
           print("에러남")
         }

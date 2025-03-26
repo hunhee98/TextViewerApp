@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import DomainInterface
 
 public final class WatchConnectivityUseCaseImpl: WatchConnectivityUseCase {
@@ -10,6 +11,10 @@ public final class WatchConnectivityUseCaseImpl: WatchConnectivityUseCase {
   
   public var isWatchAppInstalled: Bool {
     repository.isWatchAppInstalled
+  }
+  
+  public var messagePublisher: PassthroughSubject<WatchMessage.Message, Never> {
+    return repository.messagePublisher
   }
   
   public func sendTextFileToWatch(fileName: String, content: String) throws {

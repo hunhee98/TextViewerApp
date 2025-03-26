@@ -22,6 +22,7 @@ public protocol FileRepository {
   func deleteFile(at path: String) throws
   func renameFile(at path: String, newName: String) throws
   func listFiles(at path: String) throws -> [FileInfo]
+  func listTextFilesRecursivelyAsync(at path: String) -> AsyncStream<FileInfo>
 }
 
 public enum FileRepositoryError: Error {

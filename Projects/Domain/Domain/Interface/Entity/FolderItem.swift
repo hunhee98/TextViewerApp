@@ -9,6 +9,8 @@
 import Foundation
 
 public struct FolderItem: LibraryItem {
+  public var id: UUID = UUID()
+  
   public var name: String
   public let createdDate: Date
   public let subfilesCount: Int

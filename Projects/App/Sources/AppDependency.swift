@@ -33,6 +33,9 @@ public struct AppDependency {
       ),
       watchConnectivityUseCase: WatchConnectivityUseCaseImpl(
         repository: WatchConnectivityManager.shared
+      ),
+      fetchTextFilesUseCase: FetchTextFilesUseCaseImpl(
+        repository: FileRepositoryImpl()
       )
     )
   )
@@ -49,6 +52,9 @@ public struct AppDependency {
       updateViewerSettingsUseCase: MockUpdateViewerSettingsUseCaseImpl(),
       watchConnectivityUseCase: WatchConnectivityUseCaseImpl(
         repository: WatchConnectivityManager.shared
+      ),
+      fetchTextFilesUseCase: FetchTextFilesUseCaseImpl(
+        repository: FileRepositoryImpl()
       )
     )
   )
